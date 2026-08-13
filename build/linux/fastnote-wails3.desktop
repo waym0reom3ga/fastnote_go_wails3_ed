@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=fastnote-wails3
+Exec=fastnote-wails3
+Icon=fastnote-wails3
+Categories=Development;
+Terminal=false
+Keywords=wails
+Version=1.0
+StartupNotify=false

@@ -1,0 +1,148 @@
+:root {
+  --bg: #ffffff;
+  --fg: #1f2328;
+  --toolbar-bg: #f6f8fa;
+  --border: #d8dee4;
+  --accent: #0969da;
+  --status-bg: #f6f8fa;
+  --editor-bg: #ffffff;
+  --preview-bg: #fafbfc;
+  --btn-bg: #e8eaed;
+  --btn-hover: #d8dee4;
+}
+
+[data-theme="dark"] {
+  --bg: #0d1117;
+  --fg: #e6edf3;
+  --toolbar-bg: #161b22;
+  --border: #30363d;
+  --accent: #4493f8;
+  --status-bg: #161b22;
+  --editor-bg: #0d1117;
+  --preview-bg: #161b22;
+  --btn-bg: #21262d;
+  --btn-hover: #30363d;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+#toolbar {
+  display: flex;
+  gap: 4px;
+  padding: 4px 8px;
+  background: var(--toolbar-bg);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+#toolbar button {
+  padding: 6px 12px;
+  background: var(--btn-bg);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+#toolbar button:hover {
+  background: var(--btn-hover);
+}
+
+#content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+#editor {
+  width: 50%;
+  padding: 12px;
+  border: none;
+  border-right: 1px solid var(--border);
+  background: var(--editor-bg);
+  color: var(--fg);
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  resize: none;
+  outline: none;
+  overflow-y: auto;
+}
+
+#preview {
+  width: 50%;
+  padding: 12px;
+  overflow-y: auto;
+  background: var(--preview-bg);
+}
+
+#preview h1, #preview h2, #preview h3 {
+  margin: 0.5em 0 0.3em;
+}
+
+#preview p {
+  margin: 0.4em 0;
+}
+
+#preview code {
+  background: var(--toolbar-bg);
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: monospace;
+}
+
+#preview pre {
+  background: var(--toolbar-bg);
+  padding: 8px;
+  border-radius: 4px;
+  overflow-x: auto;
+}
+
+#preview blockquote {
+  border-left: 3px solid var(--accent);
+  padding-left: 12px;
+  margin: 0.5em 0;
+  opacity: 0.85;
+}
+
+#preview table {
+  border-collapse: collapse;
+  margin: 0.5em 0;
+}
+
+#preview th, #preview td {
+  border: 1px solid var(--border);
+  padding: 4px 8px;
+}
+
+#preview th {
+  background: var(--toolbar-bg);
+}
+
+#preview a {
+  color: var(--accent);
+}
+
+#status {
+  padding: 4px 8px;
+  font-size: 12px;
+  background: var(--status-bg);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}

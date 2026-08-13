@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Name=FastNote
+Comment=FastNote - Markdown Editor
+# The Exec line includes %u to pass the URL to the application
+Exec=/usr/local/bin/fastnote %u
+Terminal=false
+Type=Application
+Icon=fastnote
+Categories=Utility;
+StartupWMClass=fastnote
+
+ 
