@@ -101,3 +101,26 @@ function setStatus(text: string) {
   const el = document.getElementById("status");
   if (el) el.textContent = text;
 }
+
+// Keyboard accelerators (spec 5.2)
+document.addEventListener("keydown", async (e) => {
+  const ctrl = e.ctrlKey || e.metaKey;
+  const shift = e.shiftKey;
+
+  if (ctrl && !shift && e.key === "o") {
+    e.preventDefault();
+    document.getElementById("btn-open")?.click();
+  } else if (ctrl && !shift && e.key === "s") {
+    e.preventDefault();
+    document.getElementById("btn-save")?.click();
+  } else if (ctrl && shift && e.key === "S") {
+    e.preventDefault();
+    document.getElementById("btn-saveas")?.click();
+  } else if (ctrl && !shift && e.key === "e") {
+    e.preventDefault();
+    document.getElementById("btn-export-html")?.click();
+  } else if (ctrl && shift && e.key === "E") {
+    e.preventDefault();
+    document.getElementById("btn-export-pdf")?.click();
+  }
+});

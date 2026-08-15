@@ -84,6 +84,7 @@ type AppState struct {
 	Doc       *Document
 	NotesDir  string
 	SavedOnce bool
+	EventFile string // path to event file for phase markers (spec 5.1)
 }
 
 func NewAppState(notesDir string) *AppState {
@@ -110,7 +111,26 @@ func stripErr(err error) string {
 	return err.Error()
 }
 
-func actionOpen(state *AppState, path string) error { return state.Doc.Open(path) }
+// FnEvent appends a phase marker to the event file (spec 5.1).
+func FnEvent(state *AppState, marker string) {
+	if state == nil || state.EventFile == "" {
+		return
+	}
+	f, err := os.OpenFile(state.EventFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o644)
+	if err != nil {
+		return
+	}
+	defer f.Close()
+	fmt.Fprintln(f, marker)
+}
+
+func actionOpen(state *AppState, path string) error {
+	if err := state.Doc.Open(path); err != nil {
+		return err
+	}
+	FnEvent(state, "open")
+	return nil
+}
 
 func actionInsert(state *AppState, text string) { state.Doc.InsertText(text) }
 
@@ -118,6 +138,7 @@ func actionSave(state *AppState) (string, error) {
 	path, err := state.Doc.Save()
 	if err == nil {
 		state.SavedOnce = true
+		FnEvent(state, "save")
 	}
 	return path, err
 }
@@ -126,16 +147,25 @@ func actionSaveAs(state *AppState, path string) (string, error) {
 	path, err := state.Doc.SaveAs(path)
 	if err == nil {
 		state.SavedOnce = true
+		FnEvent(state, "save-as")
 	}
 	return path, err
 }
 
 func actionExportHTML(state *AppState, path, theme string) error {
-	return writeHTMLExport(state.Doc.Text, path, theme, "")
+	if err := writeHTMLExport(state.Doc.Text, path, theme, ""); err != nil {
+		return err
+	}
+	FnEvent(state, "export-html")
+	return nil
 }
 
 func actionExportPDF(state *AppState, path string) error {
-	return writePDFExport(state.Doc.Text, path)
+	if err := writePDFExport(state.Doc.Text, path); err != nil {
+		return err
+	}
+	FnEvent(state, "export-pdf")
+	return nil
 }
 
 func RunCLIActions(state *AppState, openPath, insert string, doSave bool, exportPath string) error {

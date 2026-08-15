@@ -3,70 +3,27 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
 )
 
 // FastNoteService exposes Go methods to the Wails frontend.
 type FastNoteService struct {
-	State          *AppState
-	Browser        *FileBrowser
-	BrowserMode    string
-	ThemeIndex     int
-	PreviewText    string
-	StatusText     string
-	controlMapPath string
-	readyFilePath  string
+	State       *AppState
+	Browser     *FileBrowser
+	BrowserMode string
+	ThemeIndex  int
+	PreviewText string
+	StatusText  string
 }
 
-func NewFastNoteService(state *AppState, openPath, controlMapPath, readyFilePath string) *FastNoteService {
+func NewFastNoteService(state *AppState) *FastNoteService {
 	svc := &FastNoteService{
-		State:          state,
-		controlMapPath: controlMapPath,
-		readyFilePath:  readyFilePath,
-	}
-	if openPath != "" {
-		actionOpen(state, openPath)
+		State: state,
 	}
 	svc.PreviewText = RenderPlain(state.Doc.Text)
-	svc.writeControlMap()
-	svc.signalReady()
+	FnEvent(state, "painted")
 	return svc
-}
-
-func (s *FastNoteService) writeControlMap() {
-	if s.controlMapPath == "" {
-		return
-	}
-	var buf strings.Builder
-	buf.WriteString("name\tx\ty\tw\th\n")
-	tb := float32(34)
-	controls := []struct {
-		name string
-		x0, y0, x1, y1 float32
-	}{
-		{"Open", 6, 6, 74, tb - 6},
-		{"Save", 80, 6, 148, tb - 6},
-		{"SaveAs", 154, 6, 222, tb - 6},
-		{"Export", 228, 6, 296, tb - 6},
-		{"ExportPdf", 302, 6, 378, tb - 6},
-		{"Theme", 384, 6, 452, tb - 6},
-		{"editor", 0, tb, 540, 700},
-	}
-	for _, c := range controls {
-		buf.WriteString(fmt.Sprintf("%s\t%d\t%d\t%d\t%d\n",
-			c.name, int(c.x0), int(c.y0), int(c.x1-c.x0), int(c.y1-c.y0)))
-	}
-	os.WriteFile(s.controlMapPath, []byte(buf.String()), 0o644)
-}
-
-func (s *FastNoteService) signalReady() {
-	if s.readyFilePath == "" {
-		return
-	}
-	os.WriteFile(s.readyFilePath, nil, 0o644)
 }
 
 // GetState returns the current document state to the frontend.
